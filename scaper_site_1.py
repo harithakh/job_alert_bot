@@ -1,12 +1,17 @@
 import requests
+import os
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+
+load_dotenv()
+
+JOB_SITE_URL_1 = f"{os.getenv('JOB_SITE_URL_1')}"
 
 # print(response.status_code)
 
 def scrape_jobs_site_1():
 
-    url = "https://itpro.lk/"
-    response = requests.get(url)
+    response = requests.get(JOB_SITE_URL_1)
 
     soup = BeautifulSoup(response.text, "html.parser")
 

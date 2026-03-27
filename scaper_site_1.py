@@ -3,6 +3,9 @@ import os
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
+from filter_jobs import is_relevant
+from job_tracker import process_jobs
+
 load_dotenv()
 
 JOB_SITE_URL_1 = f"{os.getenv('JOB_SITE_URL_1')}"
@@ -57,4 +60,6 @@ def scrape_jobs_site_1():
             "posted_date": posted_date,
             "posted_time": posted_time,})
 
-    return jobs
+    relevent_jobs = [job for job in jobs if is_relevant(job)]
+    new_jobs = process_jobs(relevent_jobs) # remove duplicates
+    return new_jobs

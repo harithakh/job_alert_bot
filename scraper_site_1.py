@@ -25,19 +25,19 @@ def scrape_jobs_site_1():
     for article in all_jobs_first_page:
 
         # job link
-        link_tag = article.select_one("a.job-record-link")
-        job_link = link_tag["href"] if link_tag else None
+        link_tag = article.select_one("a")
+        job_link = link_tag["href"] if link_tag else ""
 
         #job title
-        title = article.select_one("span.job-title")
-        job_title = title.get_text(strip=True) if title else None
+        title = article.select_one("h3.jc-title")
+        job_title = title.get_text(strip=True) if title else ""
 
         # company name
         company = article.select_one("span.jc-company")
-        company_name = company.get_text(strip=True) if company else None
+        company_name = company.get_text(strip=True) if company else ""
 
         # location
-        location_span = article.select_one("div.job-record-location span.la")
+        location_span = article.select_one("span.la")
         if location_span:
             #  Remove the img tag, then grab the remaining text
             img = location_span.find("img")
@@ -45,21 +45,21 @@ def scrape_jobs_site_1():
                 img.decompose()
             location = location_span.get_text(strip=True)
         else:
-            location = None
+            location = ""
 
         # date and time
         time_tag = article.select_one("time.time-posted")
         posted_date = time_tag["datetime"].split("T")[0] if time_tag else None
-        posted_time = time_tag["datetime"].split("T")[1] if time_tag else None
 
         jobs.append({
             "title": job_title,
             "company": company_name,
             "location": location,
             "link": job_link,
-            "posted_date": posted_date,
-            "posted_time": posted_time,})
+            "posted_date": posted_date,})
 
-    relevent_jobs = [job for job in jobs if is_relevant(job)]
+    # print(jobs)
+    most_applied_jobs_removed = [job for job in jobs if job.get("posted_date")]
+    relevent_jobs = [job for job in most_applied_jobs_removed if is_relevant(job)]
     new_jobs = process_jobs(relevent_jobs) # remove duplicates
     return new_jobs

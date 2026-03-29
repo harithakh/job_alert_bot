@@ -14,7 +14,7 @@ def send_job_alert(job):
     <b>Title:</b> {job['title']}
     <b>Company:</b> {job['company']}
     <b>Location:</b> {job['location']}
-    <b>Posted:</b> {job['posted_date']} | {job['posted_time']}
+    <b>Posted:</b> {job['posted_date']}
 
     <a href="{job['link']}">Link</a>
     """

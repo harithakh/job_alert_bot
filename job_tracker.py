@@ -8,12 +8,15 @@ EXPIRY_DAYS = 3
 def load_saved_jobs():
     if not os.path.exists(SEEN_JOBS_FILE):
         return {}
-    with open(SEEN_JOBS_FILE, "r") as f:
-        return json.load(f) # Convert json file into a Python object
+    try:
+        with open(SEEN_JOBS_FILE, "r") as f:
+            return json.load(f) # Convert json file into a Python object
+    except:
+        return []
 
 def save_seen_jobs(seen_jobs):
     with open(SEEN_JOBS_FILE, "w") as f:
-        json.dump(seen_jobs, f)
+        json.dump(seen_jobs, f, indent=2)
 
 def clean_old_jobs(seen_jobs):
     # Clear jobs those older than (EXPIRY_DAYS)days
@@ -34,10 +37,12 @@ def clean_old_jobs(seen_jobs):
 def process_jobs(jobs):
     # Return only new jobs from scrapped jobs
     seen_jobs = clean_old_jobs(load_saved_jobs())
+    seen_job_links = {job["link"] for job in seen_jobs}
 
     new_jobs = []
+
     for job in jobs:
-        if job["link"] not in seen_jobs:
+        if job["link"] not in seen_job_links:
             seen_jobs.append(job)
             new_jobs.append(job)
 

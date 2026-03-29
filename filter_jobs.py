@@ -4,7 +4,7 @@ KEYWORDS = ["python", "software", "developer", "engineer", "backend",
     "frontend", "fullstack", "support", "it", "linux", "devops"]
 
 EXCLUDED_WORDS = [
-    "sales", "marketing"
+    "sales", "marketing", "video", "graphic"
 ]
 
 def is_relevant(job):
@@ -12,7 +12,7 @@ def is_relevant(job):
     Return True if the job title roughly matches any target tech keyword.
     Uses fuzzy partial matching to catch variations in titles.
     """
-    title = job.get("title", "").lower()
+    title = (job.get("title") or "").lower()
 
     if not title:
         return False

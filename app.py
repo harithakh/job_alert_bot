@@ -8,6 +8,6 @@ if __name__ == "__main__":
     jobs = scrape_jobs_site_1() + scrape_jobs_site_2()
     # scrape_jobs_site_2()
 
-    for job in jobs[:10]:
+    for job in jobs[5:19]:
         send_job_alert(job)
         print(f"Sent job alertt for: {job['title']}")

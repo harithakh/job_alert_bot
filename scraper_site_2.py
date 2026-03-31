@@ -1,14 +1,14 @@
 import requests
 import os
-import json
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 from filter_jobs import is_relevant
 from job_tracker import process_jobs
-
+from db import init_db, insert_job, job_exists
 
 load_dotenv()
+init_db()
 
 JOB_SITE_URL_2 = os.getenv('JOB_SITE_URL_2')
 
@@ -27,9 +27,9 @@ def scrape_jobs_site_2():
     # print(job_ads)
     for job in job_ads_SE:
 
-        link_tag = job.find("a")
-        job_link = f"https://www.topjobs.lk{link_tag.get("href")}" if link_tag else None
-        job_title = (link_tag.get_text(strip=True) or "") if link_tag else ""
+        url_tag = job.find("a")
+        job_url = f"https://www.topjobs.lk{url_tag.get("href")}" if url_tag else None
+        job_title = (url_tag.get_text(strip=True) or "") if url_tag else ""
 
         company = job.find("a", class_="job-owner no-link")
         company_name = (company.get_text(strip=True) or "") if company else ""
@@ -44,11 +44,17 @@ def scrape_jobs_site_2():
             "title": job_title,
             "company": company_name,
             "location": location,
-            "link": job_link,
+            "url": job_url,
             "posted_date": posted_date,})
 
+    # Save to database
+    for job in jobs:
+        if not job_exists(job['url']):
+            insert_job(**job)
 
     relevent_jobs = [job for job in jobs if is_relevant(job)]
+
+
     new_jobs = process_jobs(relevent_jobs) # remove duplicates
 
     return new_jobs

@@ -24,9 +24,9 @@ def scrape_jobs_site_1():
 
     for article in all_jobs_first_page:
 
-        # job link
-        link_tag = article.select_one("a")
-        job_link = link_tag["href"] if link_tag else ""
+        # job url
+        url_tag = article.select_one("a")
+        job_url = url_tag["href"] if url_tag else ""
 
         #job title
         title = article.select_one("h3.jc-title")
@@ -55,7 +55,7 @@ def scrape_jobs_site_1():
             "title": job_title,
             "company": company_name,
             "location": location,
-            "link": job_link,
+            "url": job_url,
             "posted_date": posted_date,})
 
     # print(jobs)

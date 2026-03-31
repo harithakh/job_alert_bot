@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime,timedelta
 
-SEEN_JOBS_FILE = "seen_jobs.json"
+SEEN_JOBS_FILE = "data/seen_jobs.json"
 EXPIRY_DAYS = 3
 
 def load_saved_jobs():
@@ -37,12 +37,12 @@ def clean_old_jobs(seen_jobs):
 def process_jobs(jobs):
     # Return only new jobs from scrapped jobs
     seen_jobs = clean_old_jobs(load_saved_jobs())
-    seen_job_links = {job["link"] for job in seen_jobs}
+    seen_job_urls = {job["url"] for job in seen_jobs}
 
     new_jobs = []
 
     for job in jobs:
-        if job["link"] not in seen_job_links:
+        if job["url"] not in seen_job_urls:
             seen_jobs.append(job)
             new_jobs.append(job)
 

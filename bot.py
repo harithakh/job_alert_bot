@@ -16,7 +16,7 @@ def send_job_alert(job):
     <b>Location:</b> {job['location']}
     <b>Posted:</b> {job['posted_date']}
 
-    <a href="{job['link']}">Link</a>
+    <a href="{job['url']}">Link</a>
     """
 
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
@@ -27,16 +27,3 @@ def send_job_alert(job):
         "parse_mode": "HTML"
         })
     return response.ok
-
-# if __name__ == "__main__":
-#     print("TOKEN:", BOT_TOKEN)
-#     print("CHAT_ID:", CHAT_ID)
-#     test = send_job_alert({
-#         "title": "Test Job",
-#         "company": "Test Company",
-#         "location": "Remote",
-#         "posted_date": "2026-03-26",
-#         "posted_time": "04:27:23",
-#         "link": "https://example.com"
-#     })
-#     print("Message sent:", test)

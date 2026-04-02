@@ -1,10 +1,9 @@
 from rapidfuzz import fuzz
 
-KEYWORDS = ["python", "software", "developer", "engineer", "backend",
-    "frontend", "fullstack", "support", "it", "linux", "devops"]
+KEYWORDS = ["python", "software", "developer", "engineer", "backend", "fullstack", "support", "it", "linux", "devops"]
 
 EXCLUDED_WORDS = [
-    "sales", "marketing", "video", "graphic"
+    "sales", "marketing", "video", "graphic", "designer", "design", "helpdesk", "it manager"
 ]
 
 def is_relevant(job):

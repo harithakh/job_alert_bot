@@ -14,7 +14,14 @@ JOB_SITE_URL_1 = f"{os.getenv('JOB_SITE_URL_1')}"
 
 def scrape_jobs_site_1():
 
-    response = requests.get(JOB_SITE_URL_1)
+    try:
+        response = requests.get(JOB_SITE_URL_1)
+    except requests.exceptions.Timeout:
+        print(f"Timeout: {JOB_SITE_URL_1}")
+        return []
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        return []
 
     soup = BeautifulSoup(response.text, "html.parser")
 

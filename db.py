@@ -13,24 +13,26 @@ def init_db():
     with get_connection() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS job_listings(
-                id          INTEGER PRIMARY KEY AUTOINCREMENT,
-                title       TEXT NOT NULL,
-                company     TEXT,
-                location    TEXT,
-                url         TEXT UNIQUE,
-                posted_date   TEXT
+                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                title           TEXT NOT NULL,
+                company         TEXT,
+                location        TEXT,
+                url             TEXT,
+                posted_date     TEXT,
+                category        TEXT,
+                reference_no    TEXT UNIQUE
             )
 
         """)
         conn.commit()
 
-def insert_job(title, company, location, url, posted_date=""):
+def insert_job(title, company, location, url, posted_date, category, reference_no):
     try:
         with get_connection() as conn:
             conn.execute("""
                     INSERT OR IGNORE INTO  job_listings
-                        (title, company, location, url, posted_date) VALUES (?,?,?,?,?)""",
-                        (title, company, location, url, posted_date)
+                        (title, company, location, url, posted_date, category, reference_no) VALUES (?,?,?,?,?,?,?)""",
+                        (title, company, location, url, posted_date, category, reference_no)
             )
             conn.commit()
     except sqlite3.Error as e:
@@ -40,7 +42,7 @@ def get_all_jobs():
     with get_connection() as conn:
         return conn.execute("SELECT * FROM job_listings ORDER_BY posted_date DESC").fetchall()
 
-def job_exists(url):
+def job_exists(reference_no, today):
     with get_connection() as conn:
-        row = conn.execute("SELECT * FROM job_listings WHERE url = ?", (url,)).fetchone()
+        row = conn.execute("SELECT * FROM job_listings WHERE reference_no = ? AND posted_date = ?", (reference_no,today)).fetchone()
         return row is not None

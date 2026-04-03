@@ -33,10 +33,11 @@ def scrape_jobs_site_2():
             insert_job(**job)
 
     relevent_jobs = [job for job in jobs if is_relevant(job)]
+    print(f"Relevent jobs count: {len(relevent_jobs)}")
 
     # remove duplicates
     new_jobs = process_jobs(relevent_jobs)
-
+    print(f"Site 2: Alerts sent for {len(new_jobs)} jobs")
     return new_jobs
 
 def scrape_jobs(job_page_url, category):
@@ -84,5 +85,7 @@ def scrape_jobs(job_page_url, category):
                 "posted_date": posted_date,
                 "category" : category,
                 "reference_no": job_ref})
+
+    print(f"Number of {category} jobs today: {len(scraped_jobs)}\n")
 
     return scraped_jobs

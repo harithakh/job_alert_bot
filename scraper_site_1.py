@@ -10,12 +10,12 @@ load_dotenv()
 
 JOB_SITE_URL_1 = f"{os.getenv('JOB_SITE_URL_1')}"
 
-# print(response.status_code)
-
 def scrape_jobs_site_1():
 
     try:
         response = requests.get(JOB_SITE_URL_1)
+        print(f"\nSite 1 response code: {response.status_code}")
+
     except requests.exceptions.Timeout:
         print(f"Timeout: {JOB_SITE_URL_1}")
         return []
@@ -65,8 +65,13 @@ def scrape_jobs_site_1():
             "url": job_url,
             "posted_date": posted_date,})
 
-    # print(jobs)
+    print(f"Site 1 total job count: {len(jobs)}")
+
     most_applied_jobs_removed = [job for job in jobs if job.get("posted_date")]
     relevent_jobs = [job for job in most_applied_jobs_removed if is_relevant(job)]
+
     new_jobs = process_jobs(relevent_jobs) # remove duplicates
+
+    print(f"Site 1: Alerts sent for {len(new_jobs)} jobs\n")
+
     return new_jobs

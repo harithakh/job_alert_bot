@@ -72,6 +72,6 @@ def scrape_jobs_site_1():
 
     new_jobs = process_jobs(relevent_jobs) # remove duplicates
 
-    print(f"Site 1: Alerts sent for {len(new_jobs)} jobs\n")
+    print(f"Site 1: Ready to send alerts for {len(new_jobs)} jobs\n")
 
     return new_jobs

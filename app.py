@@ -7,9 +7,14 @@ from bot import send_job_alert
 
 if __name__ == "__main__":
 
-    jobs = scrape_jobs_site_1() + scrape_jobs_site_2()
+    while True:
+        try:
+            jobs = scrape_jobs_site_1() + scrape_jobs_site_2()
 
-    for job in jobs:
-        send_job_alert(job)
-        print(f"Sent job alertt for: {job['title']}")
-        time.sleep(1)
+            for job in jobs:
+                send_job_alert(job)
+                print(f"Sent job alertt for: {job['title']}")
+                time.sleep(1)
+        except Exception as e:
+            print(f"Error: {e}")
+        time.sleep(3*60*60)
